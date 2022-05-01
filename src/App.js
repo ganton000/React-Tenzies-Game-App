@@ -62,8 +62,12 @@ export default function App() {
         } else {
             setTenzies(false)
             setDice(generateNewDiceArray())
-            setBestRound( prevBest => (prevBest < currentRound ? prevBest :
+            if (bestRound === 0) {
+                setBestRound(currentRound)
+            } else {
+                setBestRound( prevBest => (prevBest < currentRound ? prevBest :
                 currentRound ))
+            }
             setCurrentRound(0)
         }
     }
