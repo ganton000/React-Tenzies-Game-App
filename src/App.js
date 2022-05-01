@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import Die from "./components/Die";
 import { nanoid } from 'nanoid';
@@ -9,14 +11,15 @@ export default function App() {
 
     const [tenzies, setTenzies] = React.useState(false)
 
-    const [bestRound, setBestRound] = React.useState( () => {
-        JSON.parse(localStorage.getItem("Best Round") || 0)
-    })
+    const [currentRound, setCurrentRound] = React.useState(0)
+
+    const [bestRound, setBestRound] = React.useState(() => (
+            JSON.parse(localStorage.getItem("best")) || 0
+        ))
 
     React.useEffect( () => {
-        localStorage.setItem("Best Round", tenzies.round)
-    }, [tenzies])
-
+            localStorage.setItem("best", JSON.stringify(bestRound))
+        }, [bestRound])
 
     React.useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -53,9 +56,15 @@ export default function App() {
                     die :
                     generateNewDie()
                 }))
+
+            setCurrentRound( prevState => prevState + 1)
+
         } else {
             setTenzies(false)
             setDice(generateNewDiceArray())
+            setBestRound( prevBest => (prevBest < currentRound ? prevBest :
+                currentRound ))
+            setCurrentRound(0)
         }
     }
 
@@ -67,8 +76,6 @@ export default function App() {
             die
         }))
     }
-
-
 
     const diceElements = dice.map(
         die => (<Die
@@ -85,6 +92,14 @@ export default function App() {
             width={800}
             height={980}
             /> }
+
+            <div className="round--countainer">
+                <p className="best">Best Round: {bestRound}</p>
+                <p className="current">Current Round:
+                <span className={currentRound >= bestRound ? "over" : ""}> {currentRound}
+                </span></p>
+            </div>
+
             <h1 className="title">Tenzies</h1>
             <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
             <div className="dice--container">

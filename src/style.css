@@ -24,6 +24,23 @@ main{
     overflow: hidden;
 }
 
+
+.best, .current{
+    position: absolute;
+    top: 0;
+    left: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.over{
+    color: rgb(196, 20, 20);
+}
+
+.current{
+    top: 20px;
+}
+
 .title {
     font-size: 40px;
     margin: 0;
